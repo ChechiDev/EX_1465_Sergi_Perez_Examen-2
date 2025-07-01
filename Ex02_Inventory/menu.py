@@ -1,11 +1,13 @@
 from time import sleep
 from lib import utils
+from lib import validation
 from inventory import InventoryManagement
 
 class BaseMenu:
     def __init__(self):
         # Instancia
         self.ut = utils.Utils()
+        self.validation = validation.Validation()
 
         # Attr
         self._pattern = "="
@@ -51,24 +53,50 @@ class AddProdMenu(BaseMenu):
 
 
     def show_add_product(self):
-        self.header()
-        print("Current inventory: \n")
+        while True:
+            self.header()
+            self.inventory.view_inventory()
+            self.footer()
 
-        if self.inventory.inventory:
-            for prod, qty in self.inventory.inventory.items():
-                print(f"{prod}: {qty}")
+            # Solicitamos al user por el nombre del producto nuevo:
+            prod_name = input("Enter a product name: ")
 
-        else:
-            print("Inventory is empty...")
+            # Validamos que no tenga números ni carácteres raros:
+            prod_valid = self.validation.val_string(prod_name)
+            if not prod_valid:
+                print("Error: Product name must contain only alphabetic characters without accents")
+                sleep(2)
+                continue
 
-        self.footer()
+            break
 
-        # Solicitamos al user por el nombre del producto nuevo:
-        prod_name = input("Enter a product name: ")
-        qty = int(input("Enter quantity: "))
+        # Solicitamos la cantidad
+        while True:
+            self.header()
+            self.inventory.view_inventory()
+            # self.footer()
+
+            try:
+                self.footer(2)
+                qty = int(input("Enter quantity: "))
+                if qty <= 0:
+                    print("Quantity must be positive")
+                    continue
+
+                break
+
+            except ValueError:
+                print("Please enter a valid number")
+                continue
+
 
         # Agregamos el producto al dict con el método add_product de inventory:
         add = self.inventory.add_product(prod_name, qty)
+        self.header()
+        print(f"Product '{prod_name}' added successfully!")
+        self.footer(2)
+        sleep(2)
+
 
 
 class LandingMenu(BaseMenu):
@@ -98,6 +126,7 @@ class LandingMenu(BaseMenu):
         print("\n0. Exit\n")
         self.separator()
 
+
     def run(self):
         """ Main menu options loop """
 
@@ -122,6 +151,7 @@ class LandingMenu(BaseMenu):
 
             except Exception as e:
                 print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     menu = LandingMenu()
