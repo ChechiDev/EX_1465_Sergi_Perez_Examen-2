@@ -1,17 +1,19 @@
-import os
 from lib.dict_builder import DictBuilder
+from lib import utils
 
 
 class InventoryManagement:
-    def __init__(self, prod):
+    def __init__(self, prod, qty):
         self.inventory = {}
+        self.ut = utils.Utils()
         self.dict_builder = DictBuilder()
 
         # Attr:
         self._prod = prod
+        self._qty = qty
 
 
-    def add_product(self, prod: str) -> dict:
+    def add_product(self, prod: str, qty: int) -> dict:
         """
         Add a new product using DictBuilder class
         """
@@ -21,11 +23,13 @@ class InventoryManagement:
         # Verificamos si existe el prod, si existe lo incrementamos, sinó lo creamos:
         check_prod = self.inventory.get(prod)
 
+        # Si existe suma la nueva qty:
         if check_prod is not None and check_prod > 0:
-            self.inventory[prod] = check_prod + 1
+            self.inventory[prod] = check_prod + qty
 
+        # Si no existe lo crea con la qty especificada por user:
         else:
-            self.inventory[prod] = 1
+            self.inventory[prod] = qty
 
         return self.inventory
 
@@ -72,11 +76,10 @@ class InventoryManagement:
         pass
 
 if __name__ == "__main__":
-    os.system("cls")
-    tienda = InventoryManagement("inicial")
+    tienda = InventoryManagement("inicial", 0)
 
 
     print("Añado producto nuevo:")
-    print(tienda.add_product("Manzanas"))
-    print(tienda.add_product("Peras"))
-    print(tienda.inventor)
+    print(tienda.add_product("Manzanas", 10))
+    print(tienda.add_product("Peras", 8))
+    print(tienda.inventory)
