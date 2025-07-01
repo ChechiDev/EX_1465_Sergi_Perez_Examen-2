@@ -12,12 +12,10 @@ class BaseMenu:
         self._width = 100
         self._header_title = "Inventory Management"
 
-
     def separator(self):
         """ Shows separation barr """
 
         print(self._pattern * self._width)
-
 
     def header(self):
         """ Shows the menu header """
@@ -64,7 +62,13 @@ class AddProdMenu(BaseMenu):
             print("Inventory is empty...")
 
         self.footer()
-        input("Press Enter to continue...")
+
+        # Solicitamos al user por el nombre del producto nuevo:
+        prod_name = input("Enter a product name: ")
+        qty = int(input("Enter quantity: "))
+
+        # Agregamos el producto al dict con el método add_product de inventory:
+        add = self.inventory.add_product(prod_name, qty)
 
 
 class LandingMenu(BaseMenu):
