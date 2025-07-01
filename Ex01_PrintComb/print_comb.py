@@ -1,4 +1,4 @@
-
+import os
 """
 Escribir un programa en Python que muestre todas las combinaciones posibles de tres dígitos distintos en orden estrictamente creciente, utilizando listas y estructuras de control.
 
@@ -21,12 +21,30 @@ El orden invertido debe implementarse manualmente, sin usar [::-1] ni .reverse()
 """
 
 def print_comb(invert=False):
-    pass
+
+    n1 = 0
+    n2 = 0
+    n3 = 0
+    comb = []
+
+    # Primer str:
+    for n1 in range(10):
+        comb.append(str(n1))
+        # Segundo str:
+        for n2 in range(n1 + 1, 10):
+            if n2 not in comb:
+                comb.append(str(n1) + str(n2))
+                # Tercer str:
+                for n3 in range(n2 + 1, 10):
+                    if n3 not in comb:
+                        comb.append(str(n1) + str(n2) + str(n3))
+    
+    print(comb)
 
 
 def main():
     pass
 
-
 if __name__ == "__main__":
-    main()
+    os.system("cls")
+    print_comb()
