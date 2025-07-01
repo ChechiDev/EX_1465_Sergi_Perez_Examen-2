@@ -8,7 +8,7 @@ class BaseMenu:
 
         # Attr
         self._pattern = "="
-        self._width = 80
+        self._width = 100
         self._header_title = "Inventory Management"
 
 
@@ -16,6 +16,7 @@ class BaseMenu:
         """ Shows separation barr """
 
         print(self._pattern * self._width)
+
 
     def header(self):
         """ Shows the menu header """
@@ -45,7 +46,29 @@ class ExitMenu(BaseMenu):
         self.footer()
 
 
+class LandingMenu(BaseMenu):
+    def __init__(self):
+        super().__init__()
+        self.menu_opt = [
+            "Add new product",
+            "Delete product",
+            "Consult a product",
+            "Modify a product quantity",
+            "Find a product",
+            "View inventory"
+        ]
+
+    def show_user_options(self):
+        """ Display user menu options """
+
+        self.header()
+        for idx, opt in enumerate(self.menu_opt):
+            print(f"\n{idx + 1}. {opt}")
+
+        print("\n0. Exit\n")
+        self.separator()
+
 
 if __name__ == "__main__":
-    menu = ExitMenu()
-    menu.exit()
+    menu = LandingMenu()
+    menu.show_user_options()
