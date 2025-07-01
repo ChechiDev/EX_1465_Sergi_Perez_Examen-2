@@ -13,3 +13,9 @@ class Utils:
 
         else:
             os.system("clear")
+
+    @staticmethod
+    def center_txt(txt: str, width: int) -> None:
+        """ Centers the given text within the specified width """
+
+        return txt.center(width)

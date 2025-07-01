@@ -17,17 +17,35 @@ class BaseMenu:
 
         print(self._pattern * self._width)
 
-
     def header(self):
         """ Shows the menu header """
 
         self.ut.clear_terminal()
         self.separator()
-        print(self._header_title)
+        print(self.ut.center_txt(self._header_title, self._width))
         self.separator()
+
+    def footer(self):
+        """ Show the footer of the menu """
+
+        print("\n" * 4)
+        self.separator()
+
+
+class ExitMenu(BaseMenu):
+    def __init__(self):
+        super().__init__()
+
+    def exit(self):
+        """ Shows the exit menu """
+
+        self.ut.clear_terminal()
+        self.header()
+        print(f"Thank you for visiting us!")
+        self.footer()
 
 
 
 if __name__ == "__main__":
-    menu = BaseMenu()
-    menu.header()
+    menu = ExitMenu()
+    menu.exit()
