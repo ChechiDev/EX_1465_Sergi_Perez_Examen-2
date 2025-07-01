@@ -1,0 +1,7 @@
+| Criterio                         | Excelente (1)                                      | Aceptable (0,5)                                               | Insuficiente (0)                           | Puntuación |
+| -------------------------------- | -------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------ | ---------- |
+| **1. Descarga y estructura**     | Repositorio correctamente descargado y organizado. | Repositorio descargado pero con desorden o errores menores. | No se ha descargado o hay errores graves.  | /1         |
+| **2. Ejercicio Ex02 completado** | Completado correctamente, sin errores.             | Completado con errores leves.                               | Incompleto o no funcional.                 | /1         |
+| **3. Ejercicio Ex03 completado** | Completado correctamente, sin errores.             | Completado con errores leves.                               | Incompleto o no funcional.                 | /1         |
+| **4. Buenas prácticas**          | Código limpio, con nombres claros y organizado.    | Código funcional pero desordenado o mal nombrado.           | Código difícil de leer o mal estructurado. | /1         |
+| **5. Comentarios y explicación** | Código bien comentado y explicado.                 | Comentarios superficiales o pocos.                          | Sin comentarios o explicaciones.           | /1         |
