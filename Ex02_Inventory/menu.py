@@ -1,5 +1,6 @@
-import os
+from time import sleep
 from lib import utils
+from inventory import InventoryManagement
 
 class BaseMenu:
     def __init__(self):
@@ -26,12 +27,11 @@ class BaseMenu:
         print(self.ut.center_txt(self._header_title, self._width))
         self.separator()
 
-    def footer(self):
+    def footer(self, space=1):
         """ Show the footer of the menu """
 
-        print("\n" * 4)
+        print("\n" * space)
         self.separator()
-
 
 class ExitMenu(BaseMenu):
     def __init__(self):
@@ -45,10 +45,36 @@ class ExitMenu(BaseMenu):
         print(f"Thank you for visiting us!")
         self.footer()
 
+class AddProdMenu(BaseMenu):
+    def __init__(self, inventory):
+        super().__init__()
+        self._header_title = "Add New Product"
+        self.inventory = inventory
+
+
+    def show_add_product(self):
+        self.header()
+        print("Current inventory: \n")
+
+        if self.inventory.inventory:
+            for prod, qty in self.inventory.inventory.items():
+                print(f"{prod}: {qty}")
+
+        else:
+            print("Inventory is empty...")
+
+        self.footer()
+        input("Press Enter to continue...")
+
 
 class LandingMenu(BaseMenu):
     def __init__(self):
         super().__init__()
+        # Instancia:
+        self.inventory = InventoryManagement("inicial", 0)
+        self.add_menu = AddProdMenu(self.inventory)
+        self.exit_menu = ExitMenu()
+
         self.menu_opt = [
             "Add new product",
             "Delete product",
@@ -68,7 +94,31 @@ class LandingMenu(BaseMenu):
         print("\n0. Exit\n")
         self.separator()
 
+    def run(self):
+        """ Main menu options loop """
+
+        while True:
+            self.show_user_options()
+
+            try:
+                user_opt = input("Select an option: ").strip()
+
+                if user_opt == "1":
+                    self.add_menu.show_add_product()
+
+                elif user_opt == "0":
+                    self.exit_menu.exit()
+                    break
+
+                else:
+                    print("Invalid option...")
+                    sleep(1)
+                    continue
+
+
+            except Exception as e:
+                print(f"Error: {e}")
 
 if __name__ == "__main__":
     menu = LandingMenu()
-    menu.show_user_options()
+    menu.run()
