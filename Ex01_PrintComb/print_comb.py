@@ -1,4 +1,5 @@
 import os
+from time import sleep
 """
 Escribir un programa en Python que muestre todas las combinaciones posibles de tres dígitos distintos en orden estrictamente creciente, utilizando listas y estructuras de control.
 
@@ -21,24 +22,36 @@ El orden invertido debe implementarse manualmente, sin usar [::-1] ni .reverse()
 """
 
 def print_comb(invert=False):
-
+    """
+    Generates and prints all combinations of three distinct digits in ascending or descending order.
+    """
     n1 = 0
     n2 = 0
     n3 = 0
     comb = []
 
-    # Primer str:
-    for n1 in range(10):
-        for n2 in range(n1 + 1, 10):
-                for n3 in range(n2 + 1, 10):
-                        comb.append(str(n1) + str(n2) + str(n3))
-    
-    print(comb)
+    # Lista creciente:
+    if invert == False:
+        for n1 in range(10):
+            for n2 in range(n1 + 1, 10):
+                    for n3 in range(n2 + 1, 10):
+                            comb.append(str(n1) + str(n2) + str(n3))
 
-def main():
-    
+        print(comb)
+
+    # Lista decreciente
+    if invert == True:
+        for n1 in range(9, -1, -1):
+            for n2 in range(9, n1, -1):
+                    for n3 in range(9, n2, -1):
+                            comb.append(str(n1) + str(n2) + str(n3))
+
+        print(comb)
+
+def main():    
     while True:
-        print("En qué orden desea ver las combinaciones? ")
+        os.system("cls")
+        print("En qué orden desea ver las combinaciones?\n")
         opts = ["Creciente", "Decreciente"]
         
         for idx, opt in enumerate(opts):
@@ -51,15 +64,14 @@ def main():
             break
 
         elif select == "2":
-             print_comb(invert=True)
-             break
-        
+            os.system("cls")
+            print_comb(invert=True)
+            break
+    
         else:
-             "Opción inválida...."
-             continue
-
+            print("Opción inválida....")
+            sleep(1)
+            continue
 
 if __name__ == "__main__":
-    os.system("cls")
-    # print_comb()
     main()
