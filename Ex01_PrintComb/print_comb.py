@@ -29,22 +29,37 @@ def print_comb(invert=False):
 
     # Primer str:
     for n1 in range(10):
-        comb.append(str(n1))
-        # Segundo str:
         for n2 in range(n1 + 1, 10):
-            if n2 not in comb:
-                comb.append(str(n1) + str(n2))
-                # Tercer str:
                 for n3 in range(n2 + 1, 10):
-                    if n3 not in comb:
                         comb.append(str(n1) + str(n2) + str(n3))
     
     print(comb)
 
-
 def main():
-    pass
+    
+    while True:
+        print("En qué orden desea ver las combinaciones? ")
+        opts = ["Creciente", "Decreciente"]
+        
+        for idx, opt in enumerate(opts):
+             print(f"{idx + 1}. {opt}")
+             
+        select = input("\nPor favor, seleccione una opción: ")
+        if select == "1":
+            os.system("cls")
+            print_comb(invert=False)
+            break
+
+        elif select == "2":
+             print_comb(invert=True)
+             break
+        
+        else:
+             "Opción inválida...."
+             continue
+
 
 if __name__ == "__main__":
     os.system("cls")
-    print_comb()
+    # print_comb()
+    main()
