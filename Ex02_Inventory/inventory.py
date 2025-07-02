@@ -26,6 +26,7 @@ class Product:
 
         return name
 
+
     def _valid_quantity(self, qty: int) -> int:
         if type(qty) != int or qty < 0:
 
@@ -162,7 +163,6 @@ class InventoryManagement:
             return False
 
 
-
     def find_product(self, txt: str) -> str:
 
         try:
@@ -218,18 +218,3 @@ class InventoryManagement:
 
             else:
                 print(f"{product}")
-
-
-if __name__ == "__main__":
-    inventory_mgr = InventoryManagement()
-
-    inventory_mgr.add_product("manzanas rojas", 10)
-    inventory_mgr.add_product("manzanas verdes", 5)
-    inventory_mgr.add_product("peras", 8)
-    inventory_mgr.add_product("kiwi", 3)
-
-    inventory_mgr.view_inventory(sort=True)
-
-    # Pruebo busqueda:
-    res = inventory_mgr.find_product("manzana")
-    print(f"manzana': {res}")

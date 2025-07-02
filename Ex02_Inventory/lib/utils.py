@@ -1,7 +1,6 @@
 import os
 import platform as plat
 
-
 class Utils:
 
     @staticmethod

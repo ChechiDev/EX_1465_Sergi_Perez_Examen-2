@@ -33,6 +33,7 @@ class BaseMenu:
         print("\n" * space)
         self.separator()
 
+
 class ExitMenu(BaseMenu):
     def __init__(self):
         super().__init__()
@@ -474,6 +475,12 @@ class LandingMenu(BaseMenu):
 
                 elif user_opt == "5":
                     self.find_menu.show_find_product()
+
+                elif user_opt == "6":
+                    self.header()
+                    self.inventory.view_inventory(sort=True, show_qty=True)
+                    self.footer(13)
+                    input("Press Enter to return to main menu...")
 
                 elif user_opt == "0":
                     self.exit_menu.exit()
