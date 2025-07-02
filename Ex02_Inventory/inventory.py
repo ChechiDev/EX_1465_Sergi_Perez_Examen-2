@@ -60,9 +60,7 @@ class InventoryManagement:
 
 
     def add_product(self, prod: str, qty: int) -> dict:
-        """
-        Add a new product using DictBuilder class
-        """
+        """ Add a new product using DictBuilder class """
         try:
             product = Product(prod, qty)
 
@@ -133,7 +131,7 @@ class InventoryManagement:
                 }
 
             else:
-                return "Product not found"
+                return None
 
         except ValueError as e:
             print(f"Error: {e}")
@@ -147,23 +145,32 @@ class InventoryManagement:
     def find_product(self, txt: str) -> str:
         pass
 
-    def view_inventory(self, sort = False):
+    def view_inventory(self, sort = False, show_qty=True):
 
-        print("Current inventory: \n")
-        if self.inventory:
-            if sort:
-                keys = list(self.inventory.keys())
-                keys.sort()
+        if not self.inventory:
+            print("Inventory is empty...")
+            return
 
-                for prod in keys:
-                    print(f"{prod}: {self.inventory[prod]}")
-
-            else:
-                for prod, qty in self.inventory.items():
-                    print(f"{prod}: {qty}")
+        if show_qty == True:
+            title = "Current inventory:"
 
         else:
-            print("Inventory is empty...")
+            title = "Available products:"
+
+        print(f"{title}\n")
+
+        if sort == True:
+            items = sorted(self.inventory.items())
+
+        else:
+            items = self.inventory.items()
+
+        for product, quantity in items:
+            if show_qty == True:
+                print(f"{product}: {quantity}")
+
+            else:
+                print(f"{product}")
 
 
 if __name__ == "__main__":

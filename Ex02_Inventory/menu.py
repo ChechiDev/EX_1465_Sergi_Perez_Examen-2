@@ -33,7 +33,6 @@ class BaseMenu:
         print("\n" * space)
         self.separator()
 
-
 class ExitMenu(BaseMenu):
     def __init__(self):
         super().__init__()
@@ -57,25 +56,33 @@ class AddProdMenu(BaseMenu):
     def show_add_product(self):
         while True:
             self.header()
-            self.inventory.view_inventory()
+            self.inventory.view_inventory(sort=True, show_qty=False)
             self.footer()
 
             # Solicitamos al user por el nombre del producto nuevo:
             prod_name = input("Enter a product name: ").strip()
 
             # Verificamos que no esté vacío:
-            if prod_name:
-                break
-
-            else:
+            if not prod_name:
                 print("Product name cannot be empty")
                 sleep(2)
                 continue
 
+            try:
+                # validamos
+                product_name = Product(prod_name, 0)
+                break
+
+            except ValueError as e:
+                print(f"Error: {e}")
+                sleep(2)
+                continue
+
+
         # Solicitamos la cantidad
         while True:
             self.header()
-            self.inventory.view_inventory()
+            self.inventory.view_inventory(sort=True, show_qty=False)
 
             try:
                 self.footer()
@@ -126,23 +133,32 @@ class DeleteProdMenu(BaseMenu):
         if not self.inventory.inventory:
             self.header()
             print("No products available to delete.")
-            self.footer()
+            self.footer(13)
             input("Press Enter to return to main menu...")
             return
 
         while True:
             self.header()
-            self.inventory.view_inventory()
+            self.inventory.view_inventory(sort=True)
             self.footer()
 
             # Solicitamos al user por el nombre del producto nuevo:
             prod_name = input("Enter a product name to delete: ").strip()
 
-            if prod_name:
+            if not prod_name:
+                print("Product name cannot be empty")
+                sleep(2)
+                continue
+
+            try:
+                # validamos
+                product = Product(prod_name, 0)
+                product_name = product.name
                 break
 
-            else:
-                print("Product name cannot be empty")
+
+            except ValueError as e:
+                print(f"Error: {e}")
                 sleep(2)
                 continue
 
@@ -180,6 +196,77 @@ class DeleteProdMenu(BaseMenu):
                 sleep(2)
 
 
+class ConsultProdMenu(BaseMenu):
+    def __init__(self, inventory):
+        super().__init__()
+        self._header_title = "Consult Product Stock"
+        self.inventory = inventory
+
+
+    def show_consult_product(self):
+        # Inventario está vacío:
+        if not self.inventory.inventory:
+            self.header()
+            print("No products available to consult.")
+            self.footer(13)
+            input("Press Enter to return to main menu...")
+            return
+
+
+        while True:
+            self.header()
+            self.inventory.view_inventory(sort=True, show_qty=False)
+            self.footer()
+
+            # Solicitamos el nombre del producto:
+            prod_name = input("Enter a product name to consult: ").strip()
+
+            if not prod_name:
+                print("Product name cannot be empty")
+                sleep(2)
+                continue
+
+            # Validamos el nombre:
+            try:
+                product = Product(prod_name, 0)
+                prod_name = product.name
+                break
+
+            except ValueError as e:
+                print(f"Error: {e}")
+                sleep(2)
+                continue
+
+        consult_prod = self.inventory.consult_product(prod_name)
+
+        # Mostramos:
+        while True:
+            self.header()
+
+            if consult_prod:
+                print("Product found in inventory\n")
+                print(f"Product: {consult_prod['product']}")
+                print(f"Quantity: {consult_prod['quantity']} units")
+
+            else:
+                print("Product not found...")
+
+            self.footer(13)
+
+            continue_consulting = input("Do you want to consult another product? (y/n): ").strip().lower()
+
+            if continue_consulting in ["s", "si", "yes", "y"]:
+                self.show_consult_product()
+                break
+
+            elif continue_consulting in ["n", "no"]:
+                break
+
+            else:
+                print("Please enter 'y' to continue or 'n' to exit")
+                sleep(1)
+
+
 class LandingMenu(BaseMenu):
     def __init__(self):
         super().__init__()
@@ -187,6 +274,7 @@ class LandingMenu(BaseMenu):
         self.inventory = InventoryManagement()
         self.add_menu = AddProdMenu(self.inventory)
         self.delete_menu = DeleteProdMenu(self.inventory)
+        self.consult_menu = ConsultProdMenu(self.inventory)
         self.exit_menu = ExitMenu()
 
         self.menu_opt = [
@@ -224,6 +312,9 @@ class LandingMenu(BaseMenu):
 
                 elif user_opt == "2":
                     self.delete_menu.show_delete_product()
+
+                elif user_opt == "3":
+                    self.consult_menu.show_consult_product()
 
                 elif user_opt == "0":
                     self.exit_menu.exit()
