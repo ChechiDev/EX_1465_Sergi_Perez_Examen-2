@@ -3,7 +3,6 @@ import re
 class Validation:
     """ Regex validation class """
 
-
     @staticmethod
     def normalize_str_space(value: str) -> str:
         """ Normalizes str spacing by removing extra spaces"""

@@ -114,7 +114,6 @@ class InventoryManagement:
         Returns:
             Quantity using .get() if exists
         """
-
         try:
             # Usamos la clase Product para validar:
             product = Product(prod, 0)
@@ -138,14 +137,39 @@ class InventoryManagement:
             return False
 
 
+    def mod_quantity(self, prod: str, new_qty: int) -> bool:
+        """ Modify the quantity of an existing product in the inventory """
+        try:
+            # Usamos la clase Product para validar:
+            product = Product(prod, new_qty)
+            product_name = product.name
 
-    def mod_quantity(self, prod: str, new_qty: int) -> int:
-        pass
+            new_qty = product.quantity
+
+            # existe?
+            if product_name in self.inventory:
+                self.inventory[product_name] = new_qty
+                return True
+
+            else:
+                # No existe:
+                print(f"Product '{product_name}' not found in inventory.")
+                return False
+
+
+        except ValueError as e:
+            print(f"Error: {e}")
+            return False
+
+
 
     def find_product(self, txt: str) -> str:
         pass
 
-    def view_inventory(self, sort = False, show_qty=True):
+
+
+    def view_inventory(self, sort = False, show_qty=True) -> None:
+        """ Display the current inventory with optional sorting and quantity visibility """
 
         if not self.inventory:
             print("Inventory is empty...")
@@ -177,13 +201,11 @@ if __name__ == "__main__":
     inventory_mgr = InventoryManagement()
 
     inventory_mgr.add_product("manzanas", 10)
+    inventory_mgr.add_product("peras", 5)
     inventory_mgr.add_product("kiwi", 3)
-    inventory_mgr.add_product("peras", 10)
 
-    result1 = inventory_mgr.consult_product("manzanas")
-    result2 = inventory_mgr.consult_product("naranjas")
-    result3 = inventory_mgr.consult_product("p3ras")
 
-    print(f"Consulta 'manzanas': {result1}")
-    print(f"Consulta 'naranjas': {result2}")
-    print(f"Consulta 'p3ras': {result3}")
+    inventory_mgr.view_inventory()
+
+    result1 = inventory_mgr.mod_quantity("manzanas", 25)
+    inventory_mgr.view_inventory()

@@ -49,7 +49,7 @@ class ExitMenu(BaseMenu):
 class AddProdMenu(BaseMenu):
     def __init__(self, inventory):
         super().__init__()
-        self._header_title = "Add New Product"
+        self._header_title = "Add New Product Menu"
         self.inventory = inventory
 
 
@@ -124,7 +124,7 @@ class AddProdMenu(BaseMenu):
 class DeleteProdMenu(BaseMenu):
     def __init__(self, inventory):
         super().__init__()
-        self._header_title = "Delete product"
+        self._header_title = "Delete product Menu"
         self.inventory = inventory
 
 
@@ -139,7 +139,7 @@ class DeleteProdMenu(BaseMenu):
 
         while True:
             self.header()
-            self.inventory.view_inventory(sort=True)
+            self.inventory.view_inventory(sort=True, show_qty=False)
             self.footer()
 
             # Solicitamos al user por el nombre del producto nuevo:
@@ -199,7 +199,7 @@ class DeleteProdMenu(BaseMenu):
 class ConsultProdMenu(BaseMenu):
     def __init__(self, inventory):
         super().__init__()
-        self._header_title = "Consult Product Stock"
+        self._header_title = "Consult Product Stock Menu"
         self.inventory = inventory
 
 
@@ -267,6 +267,93 @@ class ConsultProdMenu(BaseMenu):
                 sleep(1)
 
 
+class ModifProdQtyMenu(BaseMenu):
+    def __init__(self, inventory):
+        super().__init__()
+        self._header_title = "Modify Product Quantity Menu"
+        self.inventory = inventory
+
+    def show_modify_quantity(self):
+        # Verificar si el inventario está vacío
+        if not self.inventory.inventory:
+            self.header()
+            print("No products available to modify.")
+            self.footer(13)
+            input("Press Enter to return to main menu...")
+            return
+
+        # Bucle para solicitar el nombre del producto
+        while True:
+            self.header()
+            self.inventory.view_inventory(sort=True, show_qty=True)
+            self.footer()
+
+            # Solicitar el nombre del producto
+            prod_name = input("Enter a product name to modify: ").strip()
+
+            if not prod_name:
+                print("Product name cannot be empty")
+                sleep(2)
+                continue
+
+            # Validar el nombre del producto
+            try:
+                product = Product(prod_name, 0)
+                prod_name = product.name
+                break
+
+            except ValueError as e:
+                print(f"Error: {e}")
+                sleep(2)
+                continue
+
+        # Solicitamos a user la nueva qty
+        while True:
+            self.header()
+            self.inventory.view_inventory(sort=True, show_qty=False)
+
+            try:
+                self.footer()
+                new_qty = int(input("Enter new quantity: "))
+                break
+
+            except ValueError:
+                print("Please enter a valid number")
+                sleep(2)
+                continue
+
+        # Modificamos
+        modify_result = self.inventory.mod_quantity(prod_name, new_qty)
+
+        # Mostramos:
+        while True:
+            self.header()
+
+            if modify_result:
+                print(f"Product '{prod_name}' quantity updated successfully!")
+                print(f"New quantity: {new_qty} units")
+
+            else:
+                print(f"Failed to update product '{prod_name}'.")
+                print("Product not found in inventory.")
+
+            self.footer(13)
+
+            # Preguntamos si quiere modificar más:
+            continue_modifying = input("Do you want to modify another product quantity? (y/n): ").strip().lower()
+
+            if continue_modifying in ["s", "si", "yes", "y"]:
+                self.show_modify_quantity()
+                break
+
+            elif continue_modifying in ["n", "no"]:
+                break
+
+            else:
+                print("Please enter 'y' to continue or 'n' to exit")
+                sleep(2)
+
+
 class LandingMenu(BaseMenu):
     def __init__(self):
         super().__init__()
@@ -275,6 +362,7 @@ class LandingMenu(BaseMenu):
         self.add_menu = AddProdMenu(self.inventory)
         self.delete_menu = DeleteProdMenu(self.inventory)
         self.consult_menu = ConsultProdMenu(self.inventory)
+        self.modify_menu = ModifProdQtyMenu(self.inventory)
         self.exit_menu = ExitMenu()
 
         self.menu_opt = [
@@ -315,6 +403,9 @@ class LandingMenu(BaseMenu):
 
                 elif user_opt == "3":
                     self.consult_menu.show_consult_product()
+
+                elif user_opt == "4":
+                    self.modify_menu.show_modify_quantity()
 
                 elif user_opt == "0":
                     self.exit_menu.exit()
