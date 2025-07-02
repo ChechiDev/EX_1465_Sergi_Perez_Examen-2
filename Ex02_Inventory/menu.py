@@ -92,10 +92,24 @@ class AddProdMenu(BaseMenu):
         self.inventory.add_product(prod_name, qty)
 
         # Mostramos:
-        self.header()
-        print(f"Product '{product.name}' added successfully!")
-        self.footer(4)
-        sleep(2)
+        while True:
+            self.header()
+            print(f"Product '{product.name}' added successfully!")
+            self.footer(3)
+
+            # Preguntamos si se quiere seguir añadiendo productos o no:
+            continue_adding = input("Do you want to add another product? (y/n): ").strip().lower()
+
+            if continue_adding in ["s", "si", "yes", "y"]:
+                self.show_add_product()
+                break # Seguims agregando
+
+            elif continue_adding in ["n", "no"]:
+                break # Salimos a landing menu
+
+            else:
+                print("Please enter 'y' to continue adding or 'n' to exit")
+                sleep(1)
 
 
 class LandingMenu(BaseMenu):
@@ -146,7 +160,6 @@ class LandingMenu(BaseMenu):
                     print("Invalid option...")
                     sleep(1)
                     continue
-
 
             except Exception as e:
                 print(f"Error: {e}")
