@@ -87,8 +87,28 @@ class InventoryManagement:
         return self.inventory
 
 
-    def delete_product(self, prod: str) -> None:
-        pass
+    def delete_product(self, prod: str) -> bool:
+        """ Delete a product from inventory """
+
+        try:
+           # Usamos la clase Product para validar:
+           product = Product(prod, 0)
+           product_name = product.name
+
+           # Checkeamos:
+           if product_name in self.inventory:
+               # Si está borramos:
+               del self.inventory[product_name]
+               return True
+
+           # Si no está:
+           else:
+               return False
+
+        except ValueError as e:
+            print(f"Erro: {e}")
+            return False
+
 
     def consult_product(self, prod: str) -> dict:
         pass
@@ -122,13 +142,9 @@ if __name__ == "__main__":
     inventory_mgr = InventoryManagement()
 
     inventory_mgr.add_product("manzanas", 10)
-    inventory_mgr.view_inventory()
+    inventory_mgr.add_product("kiwi", 3)
+    inventory_mgr.add_product("peras", 10)
 
-    inventory_mgr.add_product("ManzAnas", 5)
-    inventory_mgr.view_inventory()
+    inventory_mgr.delete_product("peras")
 
-    inventory_mgr.add_product("peras", 5)
-    inventory_mgr.view_inventory()
-
-    inventory_mgr.add_product("kiWi", 5)
     inventory_mgr.view_inventory()

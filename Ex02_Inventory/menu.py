@@ -33,6 +33,7 @@ class BaseMenu:
         print("\n" * space)
         self.separator()
 
+
 class ExitMenu(BaseMenu):
     def __init__(self):
         super().__init__()
@@ -44,6 +45,7 @@ class ExitMenu(BaseMenu):
         self.header()
         print(f"Thank you for visiting us!")
         self.footer()
+
 
 class AddProdMenu(BaseMenu):
     def __init__(self, inventory):
@@ -112,12 +114,24 @@ class AddProdMenu(BaseMenu):
                 sleep(1)
 
 
+class DeleteProdMenu(BaseMenu):
+    def __init__(self, inventory):
+        super().__init__()
+        self._header_title = "Delete product"
+        self.inventory = inventory
+
+
+    def show_delete_product(self):
+        pass
+
+
 class LandingMenu(BaseMenu):
     def __init__(self):
         super().__init__()
         # Instancia:
         self.inventory = InventoryManagement()
         self.add_menu = AddProdMenu(self.inventory)
+        self.delete_menu = DeleteProdMenu(self.inventory)
         self.exit_menu = ExitMenu()
 
         self.menu_opt = [
@@ -128,6 +142,7 @@ class LandingMenu(BaseMenu):
             "Find a product",
             "View inventory"
         ]
+
 
     def show_user_options(self):
         """ Display user menu options """
@@ -151,6 +166,9 @@ class LandingMenu(BaseMenu):
 
                 if user_opt == "1":
                     self.add_menu.show_add_product()
+
+                elif user_opt == "2":
+                    self.delete_menu.show_delete_product()
 
                 elif user_opt == "0":
                     self.exit_menu.exit()
