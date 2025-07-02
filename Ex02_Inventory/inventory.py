@@ -35,10 +35,9 @@ class Product:
 
         return qty
 
-
     @property
     def name(self) -> str:
-        return self._name
+        return self._name.strip().title()
 
     @property
     def quantity(self):
@@ -54,7 +53,7 @@ class Product:
 
 
 class InventoryManagement:
-    def __init__(self, prod, qty):
+    def __init__(self):
         self.inventory = {}
         self.ut = utils.Utils()
         self.dict_builder = DictBuilder()
@@ -65,11 +64,27 @@ class InventoryManagement:
         Add a new product using DictBuilder class
         """
         try:
-            product = Product(prod)
+            product = Product(prod, qty)
+
+            # Verificamos si el producto existe:
+            if product.name in self.inventory:
+                # Si existe incrementamos cantidad:
+                self.inventory[product.name] += product.quantity
+
+            else:
+                # Sinó creamos el dict
+                self.dict_builder._prod = product.name
+                self.dict_builder._qty = product.quantity
+
+                new_entry = self.dict_builder.to_dict()
+
+                # Agregar al inventario principal
+                self.inventory[product.name] = new_entry["quantity"]
 
         except ValueError as e:
             print(f"Error: {e}")
-            return self.inventory
+
+        return self.inventory
 
 
     def delete_product(self, prod: str) -> None:
@@ -104,5 +119,16 @@ class InventoryManagement:
 
 
 if __name__ == "__main__":
-    p1 = Product("MAnzanas", 10)
-    print(p1)
+    inventory_mgr = InventoryManagement()
+
+    inventory_mgr.add_product("manzanas", 10)
+    inventory_mgr.view_inventory()
+
+    inventory_mgr.add_product("ManzAnas", 5)
+    inventory_mgr.view_inventory()
+
+    inventory_mgr.add_product("peras", 5)
+    inventory_mgr.view_inventory()
+
+    inventory_mgr.add_product("kiWi", 5)
+    inventory_mgr.view_inventory()
