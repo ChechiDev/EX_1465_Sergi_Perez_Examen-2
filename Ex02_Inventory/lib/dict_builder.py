@@ -7,9 +7,7 @@ class DictBuilder:
 
     # Genera un diccionario
     def to_dict(self) -> dict:
-        """
-        Convertimos a diccionario (inventario)
-        """
+        """ Convertimos a diccionario (inventario) """
 
         inventory = {
             "prod_name": self._prod,

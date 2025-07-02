@@ -3,6 +3,7 @@ from lib import utils
 from lib import validation
 from inventory import InventoryManagement, Product
 
+
 class BaseMenu:
     def __init__(self):
         # Instancia
