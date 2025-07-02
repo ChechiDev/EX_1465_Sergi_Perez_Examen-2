@@ -164,7 +164,31 @@ class InventoryManagement:
 
 
     def find_product(self, txt: str) -> str:
-        pass
+
+        try:
+            # Validamos:
+            if not txt:
+                print("Text cannot be empty")
+
+            # Normalizamos el formato de texto en Validation:
+            search_txt = Validation.normalize_str_space(txt).lower()
+
+            # Lista para almacenar los productos encontrados:
+            found_products = []
+
+            # Buscamos en el inventario los productos:
+            for product_name, quantity in self.inventory.items():
+                if search_txt in product_name.lower():
+                    found_products.append({
+                        "product": product_name,
+                        "quantity": quantity
+                    })
+
+            return found_products
+
+        except ValueError as e:
+            print(f"Error: {e}")
+            return []
 
 
 
@@ -200,12 +224,13 @@ class InventoryManagement:
 if __name__ == "__main__":
     inventory_mgr = InventoryManagement()
 
-    inventory_mgr.add_product("manzanas", 10)
-    inventory_mgr.add_product("peras", 5)
+    inventory_mgr.add_product("manzanas rojas", 10)
+    inventory_mgr.add_product("manzanas verdes", 5)
+    inventory_mgr.add_product("peras", 8)
     inventory_mgr.add_product("kiwi", 3)
 
+    inventory_mgr.view_inventory(sort=True)
 
-    inventory_mgr.view_inventory()
-
-    result1 = inventory_mgr.mod_quantity("manzanas", 25)
-    inventory_mgr.view_inventory()
+    # Pruebo busqueda:
+    res = inventory_mgr.find_product("manzana")
+    print(f"manzana': {res}")
