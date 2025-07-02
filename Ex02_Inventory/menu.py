@@ -27,7 +27,7 @@ class BaseMenu:
         print(self.ut.center_txt(self._header_title, self._width))
         self.separator()
 
-    def footer(self, space=1):
+    def footer(self, space=11):
         """ Show the footer of the menu """
 
         print("\n" * space)
@@ -78,7 +78,7 @@ class AddProdMenu(BaseMenu):
             self.inventory.view_inventory()
 
             try:
-                self.footer(2)
+                self.footer()
                 qty = int(input("Enter quantity: "))
                 break
 
@@ -97,7 +97,7 @@ class AddProdMenu(BaseMenu):
         while True:
             self.header()
             print(f"Product '{product.name}' added successfully!")
-            self.footer(3)
+            self.footer(13)
 
             # Preguntamos si se quiere seguir añadiendo productos o no:
             continue_adding = input("Do you want to add another product? (y/n): ").strip().lower()
@@ -111,7 +111,7 @@ class AddProdMenu(BaseMenu):
 
             else:
                 print("Please enter 'y' to continue adding or 'n' to exit")
-                sleep(1)
+                sleep(2)
 
 
 class DeleteProdMenu(BaseMenu):
@@ -122,7 +122,62 @@ class DeleteProdMenu(BaseMenu):
 
 
     def show_delete_product(self):
-        pass
+        # Primero checkeamos que el inventario no esté vacío
+        if not self.inventory.inventory:
+            self.header()
+            print("No products available to delete.")
+            self.footer()
+            input("Press Enter to return to main menu...")
+            return
+
+        while True:
+            self.header()
+            self.inventory.view_inventory()
+            self.footer()
+
+            # Solicitamos al user por el nombre del producto nuevo:
+            prod_name = input("Enter a product name to delete: ").strip()
+
+            if prod_name:
+                break
+
+            else:
+                print("Product name cannot be empty")
+                sleep(2)
+                continue
+
+
+        # Traemos el nombre del producto desde la clase Product:
+        product = Product(prod_name, 0)
+        prod_name = product.name
+
+        # Eliminamos el producto con el método del inventairo:
+        del_prod = self.inventory.delete_product(prod_name)
+
+        # Mostramos result:
+        while True:
+            self.header()
+            if del_prod:
+                print(f"Product: '{prod_name}' deleted from inventory succesfully!")
+
+            else:
+                print(f"Product: '{prod_name}' not found in inventory.")
+
+
+            # Preguntamos si se quiere seguir borrando:
+            self.footer(13)
+            continue_deleting = input("Do you want to delete another product? (y/n): ").strip().lower()
+
+            if continue_deleting in ["s", "si", "yes", "y"]:
+                self.show_delete_product()
+                break # Seguimos borrando
+
+            elif continue_deleting in ["n", "no"]:
+                break # Salimos a landing menu
+
+            else:
+                print("Please enter 'y' to continue adding or 'n' to exit")
+                sleep(2)
 
 
 class LandingMenu(BaseMenu):

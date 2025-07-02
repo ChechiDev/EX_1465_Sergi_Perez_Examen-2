@@ -98,7 +98,7 @@ class InventoryManagement:
            # Checkeamos:
            if product_name in self.inventory:
                # Si está borramos:
-               del self.inventory[product_name]
+               self.inventory.pop(product_name)
                return True
 
            # Si no está:
@@ -106,12 +106,40 @@ class InventoryManagement:
                return False
 
         except ValueError as e:
-            print(f"Erro: {e}")
+            print(f"Error: {e}")
             return False
 
 
     def consult_product(self, prod: str) -> dict:
-        pass
+        """
+        Consult a product in inventory
+        Returns:
+            Quantity using .get() if exists
+        """
+
+        try:
+            # Usamos la clase Product para validar:
+            product = Product(prod, 0)
+            product_name = product.name
+
+            # Buscamos la cantidad del producto:
+            quantity = self.inventory.get(product_name)
+
+            # Si existe devolvemos cantidaD:
+            if quantity is not None:
+                return {
+                    "product": product_name,
+                    "quantity": quantity
+                }
+
+            else:
+                return "Product not found"
+
+        except ValueError as e:
+            print(f"Error: {e}")
+            return False
+
+
 
     def mod_quantity(self, prod: str, new_qty: int) -> int:
         pass
@@ -145,6 +173,10 @@ if __name__ == "__main__":
     inventory_mgr.add_product("kiwi", 3)
     inventory_mgr.add_product("peras", 10)
 
-    inventory_mgr.delete_product("peras")
+    result1 = inventory_mgr.consult_product("manzanas")
+    result2 = inventory_mgr.consult_product("naranjas")
+    result3 = inventory_mgr.consult_product("p3ras")
 
-    inventory_mgr.view_inventory()
+    print(f"Consulta 'manzanas': {result1}")
+    print(f"Consulta 'naranjas': {result2}")
+    print(f"Consulta 'p3ras': {result3}")
