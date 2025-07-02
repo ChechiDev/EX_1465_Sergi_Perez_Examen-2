@@ -65,7 +65,7 @@ class AddProdMenu(BaseMenu):
             prod_valid = self.validation.val_string(prod_name)
             if not prod_valid:
                 print("Error: Product name must contain only alphabetic characters without accents")
-                sleep(2)
+                sleep(3)
                 continue
 
             break
@@ -74,19 +74,20 @@ class AddProdMenu(BaseMenu):
         while True:
             self.header()
             self.inventory.view_inventory()
-            # self.footer()
 
             try:
-                self.footer(2)
+                self.footer(3)
                 qty = int(input("Enter quantity: "))
                 if qty <= 0:
-                    print("Quantity must be positive")
+                    print("Quantity must be positive...")
+                    sleep(2)
                     continue
 
                 break
 
             except ValueError:
                 print("Please enter a valid number")
+                sleep(2)
                 continue
 
 
@@ -94,9 +95,8 @@ class AddProdMenu(BaseMenu):
         add = self.inventory.add_product(prod_name, qty)
         self.header()
         print(f"Product '{prod_name}' added successfully!")
-        self.footer(2)
+        self.footer(4)
         sleep(2)
-
 
 
 class LandingMenu(BaseMenu):

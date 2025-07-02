@@ -1,5 +1,56 @@
 from lib.dict_builder import DictBuilder
+from lib.validation import Validation
 from lib import utils
+
+
+class Product:
+    """ Class that represents a product """
+    def __init__(self, name: str, qty: int = 0):
+        # Instancias:
+        self.validation = Validation()
+
+        # Attr:
+        self._name = self._valid_name(name)
+        self._qty = self._valid_quantity(qty)
+
+
+    def _valid_name(self, name: str) -> str:
+        # Normalizamos los espacios para un formato correcto:
+        name = Validation.normalize_str_space(name)
+
+        # validación: Nombre sin carácteres raros, ni números:
+        if not Validation.val_string(name):
+            raise ValueError(
+                f"Error: Name -> '{name}' must contain only alphabetic characters without accents..."
+            )
+
+        return name
+
+    def _valid_quantity(self, qty: int) -> int:
+        if type(qty) != int or qty < 0:
+
+            raise ValueError(
+                f"Error: The quantity '{qty}' must be a positive integer"
+            )
+
+        return qty
+
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def quantity(self):
+        return self._qty
+
+    @name.setter
+    def name(self, name: str):
+        self._name = self._valid_name(name)
+
+    @quantity.setter
+    def quantity(self, qty: int):
+        self._qty = self._valid_quantity(qty)
 
 
 class InventoryManagement:
@@ -8,56 +59,17 @@ class InventoryManagement:
         self.ut = utils.Utils()
         self.dict_builder = DictBuilder()
 
-        # Attr:
-        self._prod = prod
-        self._qty = qty
-
 
     def add_product(self, prod: str, qty: int) -> dict:
         """
         Add a new product using DictBuilder class
         """
-        self.dict_builder._prod = prod
-        inventory = self.dict_builder.to_dict()
+        try:
+            product = Product(prod)
 
-        # Verificamos si existe el prod, si existe lo incrementamos, sinó lo creamos:
-        check_prod = self.inventory.get(prod)
-
-        # Si existe suma la nueva qty:
-        if check_prod is not None and check_prod > 0:
-            self.inventory[prod] = check_prod + qty
-
-        # Si no existe lo crea con la qty especificada por user:
-        else:
-            self.inventory[prod] = qty
-
-        return self.inventory
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        except ValueError as e:
+            print(f"Error: {e}")
+            return self.inventory
 
 
     def delete_product(self, prod: str) -> None:
@@ -84,7 +96,7 @@ class InventoryManagement:
                     print(f"{prod}: {self.inventory[prod]}")
 
             else:
-                for prod, qty in self.inventory.inventory.items():
+                for prod, qty in self.inventory.items():
                     print(f"{prod}: {qty}")
 
         else:
@@ -92,10 +104,5 @@ class InventoryManagement:
 
 
 if __name__ == "__main__":
-    tienda = InventoryManagement("inicial", 0)
-
-
-    print("Añado producto nuevo:")
-    print(tienda.add_product("Manzanas", 10))
-    print(tienda.add_product("Peras", 8))
-    print(tienda.inventory)
+    p1 = Product("MAnzanas", 10)
+    print(p1)
