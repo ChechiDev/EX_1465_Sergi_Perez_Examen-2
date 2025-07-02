@@ -354,6 +354,70 @@ class ModifProdQtyMenu(BaseMenu):
                 sleep(2)
 
 
+class FindProdMenu(BaseMenu):
+    def __init__(self, inventory):
+        super().__init__()
+        self._header_title = "Find Product Menu"
+        self.inventory = inventory
+
+    def show_find_product(self):
+        # Lo de siempre... vacio?
+        if not self.inventory.inventory:
+            self.header()
+            print("No products available to search.")
+            self.footer(13)
+            input("Press Enter to return to main menu...")
+            return
+
+
+        while True:
+            self.header()
+            self.inventory.view_inventory(sort=True, show_qty=False)
+            self.footer()
+
+            search_text = input("Enter text to search for products: ").strip()
+
+            if not search_text:
+                print("Search text cannot be empty")
+                sleep(2)
+                continue
+
+            break
+
+        # Buscamos los productos con el método de inventory:
+        found_products = self.inventory.find_product(search_text)
+
+        # Mostrar resultados
+        while True:
+            self.header()
+
+            if found_products:
+                print(f"Search results for '{search_text}':\n")
+                print(f"Found {len(found_products)} product(s):\n")
+
+                for product in found_products:
+                    print(f"{product['product']}: {product['quantity']} units")
+
+            else:
+                print(f"No products found containing '{search_text}'")
+
+            self.footer(13)
+
+            # Preguntar si quiere buscar más productos
+            continue_searching = input("Do you want to search for another product? (y/n): ").strip().lower()
+
+            if continue_searching in ["s", "si", "yes", "y"]:
+                self.show_find_product()
+                break
+
+            elif continue_searching in ["n", "no"]:
+                break
+
+            else:
+                print("Please enter 'y' to continue or 'n' to exit")
+                sleep(2)
+
+
 class LandingMenu(BaseMenu):
     def __init__(self):
         super().__init__()
@@ -363,6 +427,7 @@ class LandingMenu(BaseMenu):
         self.delete_menu = DeleteProdMenu(self.inventory)
         self.consult_menu = ConsultProdMenu(self.inventory)
         self.modify_menu = ModifProdQtyMenu(self.inventory)
+        self.find_menu = FindProdMenu(self.inventory)
         self.exit_menu = ExitMenu()
 
         self.menu_opt = [
@@ -406,6 +471,9 @@ class LandingMenu(BaseMenu):
 
                 elif user_opt == "4":
                     self.modify_menu.show_modify_quantity()
+
+                elif user_opt == "5":
+                    self.find_menu.show_find_product()
 
                 elif user_opt == "0":
                     self.exit_menu.exit()

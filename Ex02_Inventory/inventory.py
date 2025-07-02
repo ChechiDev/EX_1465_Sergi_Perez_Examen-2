@@ -191,7 +191,6 @@ class InventoryManagement:
             return []
 
 
-
     def view_inventory(self, sort = False, show_qty=True) -> None:
         """ Display the current inventory with optional sorting and quantity visibility """
 
